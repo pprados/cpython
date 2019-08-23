@@ -9,6 +9,7 @@ import sys
 import types
 import unittest.mock
 import weakref
+import typing
 
 class TypesTests(unittest.TestCase):
 
@@ -598,6 +599,37 @@ class TypesTests(unittest.TestCase):
         self.assertIsInstance(int.from_bytes, types.BuiltinMethodType)
         self.assertIsInstance(int.__new__, types.BuiltinMethodType)
 
+    def test_or_types_operator(self):
+        self.assertEqual(int | str, typing.Union[int, str])
+        self.assertEqual(int | None, typing.Union[int, None])
+        self.assertEqual(None | int, typing.Union[int, None])
+        self.assertEqual(int | str | list, typing.Union[int, str, list])
+        self.assertEqual(int | (str | list), typing.Union[int, str, list])
+        self.assertEqual(
+            BaseException | \
+            bool | \
+            bytes | \
+            complex | \
+            float | \
+            int | \
+            list | \
+            map | \
+            set,
+            typing.Union[
+                BaseException,
+                bool,
+                bytes,
+                complex,
+                float,
+                int,
+                list,
+                map,
+                set,
+            ])
+        with self.assertRaises(TypeError):
+            int | 3
+        with self.assertRaises(TypeError):
+            3 | int
 
 class MappingProxyTests(unittest.TestCase):
     mappingproxy = types.MappingProxyType

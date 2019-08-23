@@ -295,7 +295,8 @@ User defined generic type aliases are also supported. Examples::
 
    from typing import TypeVar, Iterable, Tuple, Union
    S = TypeVar('S')
-   Response = Union[Iterable[S], int]
+   Response = Iterable[S] | int
+   # or Response = Union[Iterable[S], int]
 
    # Return type here is same as Union[Iterable[str], int]
    def response(query: str) -> Response[str]:
@@ -1192,12 +1193,13 @@ The module defines the following classes, functions and decorators:
 
    Union type; ``Union[X, Y]`` means either X or Y.
 
-   To define a union, use e.g. ``Union[int, str]``.  Details:
+   To define a union, use e.g. ``Union[int, str]`` or ``int | str``.  Details:
 
    * The arguments must be types and there must be at least one.
 
    * Unions of unions are flattened, e.g.::
 
+       int | str | float == Union[int, str, float]
        Union[Union[int, str], float] == Union[int, str, float]
 
    * Unions of a single argument vanish, e.g.::
@@ -1206,18 +1208,22 @@ The module defines the following classes, functions and decorators:
 
    * Redundant arguments are skipped, e.g.::
 
+       int | str | int == Union[int, str]
        Union[int, str, int] == Union[int, str]
 
    * When comparing unions, the argument order is ignored, e.g.::
 
+       int | str == str | int
        Union[int, str] == Union[str, int]
 
    * You cannot subclass or instantiate a union.
 
-   * You cannot write ``Union[X][Y]``.
+   * You cannot write ``Union[X][Y]`` or `` X | Y``.
 
    * You can use ``Optional[X]`` as a shorthand for ``Union[X, None]``.
 
+   .. versionadded:: 3.9
+      Add binary or syntax : ``typeA | typeB``
    .. versionchanged:: 3.7
       Don't remove explicit subclasses from unions at runtime.
 
