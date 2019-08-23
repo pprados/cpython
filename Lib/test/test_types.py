@@ -638,6 +638,7 @@ class TypesTests(unittest.TestCase):
     def test_invert_types_operator(self):
         self.assertEqual(~int, typing.Union[int, None])
         self.assertEqual(~str, typing.Union[str, None])
+        self.assertEqual(~Literal[4], typing.Union[Literal[4], None])
         class A : ...
         self.assertEqual(~A, typing.Union[A, None])
 
