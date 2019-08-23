@@ -3608,6 +3608,37 @@ type_is_gc(PyTypeObject *type)
     return type->tp_flags & Py_TPFLAGS_HEAPTYPE;
 }
 
+static PyObject *
+type_or(PyTypeObject* self, PyObject* param) {
+    // Check param is a PyType or GenericAlias
+    if ((param == NULL) ||
+        (strncmp("_GenericAlias", Py_TYPE(param)->tp_name, strlen("_GenericAlias")) != 0 &&
+         (param != Py_None) &&
+         (PyObject_IsInstance(param, (PyObject *) &PyType_Type) != 1)
+        )
+            ) {
+        PyErr_SetString(PyExc_TypeError, "'type' expected");
+        return NULL;
+    }
+
+    // 1. Create a tuple with types
+    PyObject *tuple=PyTuple_Pack(2,self, param);
+    // 2. Create Union with tuple
+    PyObject* typing=PyImport_ImportModule("typing");
+    PyObject* unionType = PyObject_GetAttrString(typing,"Union");
+    PyObject *newUnion=PyObject_GetItem(unionType, tuple);
+    // 3. Clean memory
+    Py_DECREF(typing);
+    Py_DECREF(unionType);
+    Py_DECREF(tuple);
+    // 4. Return instance
+    return newUnion;
+}
+
+static PyNumberMethods type_as_number = {
+        .nb_or = (binaryfunc)type_or, // Add __or__ function
+};
+
 PyTypeObject PyType_Type = {
     PyVarObject_HEAD_INIT(&PyType_Type, 0)
     "type",                                     /* tp_name */
@@ -3619,7 +3650,7 @@ PyTypeObject PyType_Type = {
     0,                                          /* tp_setattr */
     0,                                          /* tp_as_async */
     (reprfunc)type_repr,                        /* tp_repr */
-    0,                                          /* tp_as_number */
+    &type_as_number,                           /* tp_as_number */
     0,                                          /* tp_as_sequence */
     0,                                          /* tp_as_mapping */
     0,                                          /* tp_hash */
