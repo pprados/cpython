@@ -3643,8 +3643,7 @@ type_or(PyTypeObject* self, PyObject* param) {
     if ((param == NULL) ||
         (strcmp("_GenericAlias", Py_TYPE(param)->tp_name) != 0 &&
          (param != Py_None) &&
-         (PyObject_IsInstance(param, (PyObject *) &PyType_Type) != 1)
-        )
+         (PyObject_IsInstance(param, (PyObject *) &PyType_Type) != 1))
             ) {
         PyErr_SetString(PyExc_TypeError, "'type' expected");
         return NULL;
