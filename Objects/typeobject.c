@@ -5343,7 +5343,7 @@ PyType_Ready(PyTypeObject *type)
     /* Initialize tp_base (defaults to BaseObject unless that's us) */
     base = type->tp_base;
     if (base == NULL && type != &PyBaseObject_Type) {
-        base = type->tp_base = &PyBaseObject_Type; // PPR Auto héritage
+        base = type->tp_base = &PyBaseObject_Type;
         Py_INCREF(base);
     }
 
