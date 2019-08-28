@@ -1026,7 +1026,7 @@ fields:
           class Component(NamedTuple):
               part_number: int
               weight: float
-              description: Optional[str] = None
+              description: ~str = None
 
     * See :meth:`types.SimpleNamespace` for a mutable namespace based on an
       underlying dictionary instead of a tuple.
