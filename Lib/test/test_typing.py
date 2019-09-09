@@ -237,8 +237,6 @@ class UnionTests(BaseTestCase):
         with self.assertRaises(TypeError):
             issubclass(Union, int)
         with self.assertRaises(TypeError):
-            issubclass(int, Union[int, str])
-        with self.assertRaises(TypeError):
             issubclass(Union[int, str], int)
 
     def test_union_any(self):
@@ -339,10 +337,6 @@ class UnionTests(BaseTestCase):
         with self.assertRaises(TypeError):
             Union[()]
 
-    def test_union_instance_type_error(self):
-        with self.assertRaises(TypeError):
-            isinstance(42, Union[int, str])
-
     def test_no_eval_union(self):
         u = Union[int, str]
         def f(x: u): ...
@@ -394,11 +388,6 @@ class TupleTests(BaseTestCase):
         class MyTuple(tuple):
             pass
         self.assertTrue(issubclass(MyTuple, Tuple))
-
-    def test_tuple_instance_type_error(self):
-        with self.assertRaises(TypeError):
-            isinstance((0, 0), Tuple[int, int])
-        self.assertIsInstance((0, 0), Tuple)
 
     def test_repr(self):
         self.assertEqual(repr(Tuple), 'typing.Tuple')
