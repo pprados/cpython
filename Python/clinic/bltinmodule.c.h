@@ -787,14 +787,15 @@ exit:
 }
 
 PyDoc_STRVAR(builtin_isinstance__doc__,
-"isinstance($module, obj, class_or_tuple, /)\n"
+"isinstance($module, obj, class_or_tuple_or_union, /)\n"
 "--\n"
 "\n"
 "Return whether an object is an instance of a class or of a subclass thereof.\n"
 "\n"
 "A tuple, as in ``isinstance(x, (A, B, ...))``, may be given as the target to\n"
 "check against. This is equivalent to ``isinstance(x, A) or isinstance(x, B)\n"
-"or ...`` etc.");
+"or ...`` etc.\n"
+"Accept ``isinsance(x, A|B|C)``");
 
 #define BUILTIN_ISINSTANCE_METHODDEF    \
     {"isinstance", (PyCFunction)(void(*)(void))builtin_isinstance, METH_FASTCALL, builtin_isinstance__doc__},
@@ -822,14 +823,15 @@ exit:
 }
 
 PyDoc_STRVAR(builtin_issubclass__doc__,
-"issubclass($module, cls, class_or_tuple, /)\n"
+"issubclass($module, cls, class_or_tuple_or_union, /)\n"
 "--\n"
 "\n"
 "Return whether \'cls\' is a derived from another class or is the same class.\n"
 "\n"
 "A tuple, as in ``issubclass(x, (A, B, ...))``, may be given as the target to\n"
 "check against. This is equivalent to ``issubclass(x, A) or issubclass(x, B)\n"
-"or ...`` etc.");
+"or ...`` etc.\n"
+"Accept ``issubclass(x, A|B|C)``");
 
 #define BUILTIN_ISSUBCLASS_METHODDEF    \
     {"issubclass", (PyCFunction)(void(*)(void))builtin_issubclass, METH_FASTCALL, builtin_issubclass__doc__},

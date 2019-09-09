@@ -2447,7 +2447,7 @@ recursive_isinstance(PyObject *inst, PyObject *cls)
     }
     else {
         if (!check_class(cls,
-            "isinstance() arg 2 must be a type or tuple of types"))
+            "isinstance() arg 2 must be a type or tuple of types or union"))
             return -1;
         retval = _PyObject_LookupAttrId(inst, &PyId___class__, &icls);
         if (icls != NULL) {
@@ -2473,7 +2473,14 @@ PyObject_IsInstance(PyObject *inst, PyObject *cls)
     if (PyType_CheckExact(cls)) {
         return recursive_isinstance(inst, cls);
     }
-
+/*
+    if (!strcmp(Py_TYPE(cls)->tp_name,"_GenericAlias")) {
+        PyObject* new_cls = PyObject_GetAttrString(cls, "__args__");
+        if (new_cls != NULL) {
+            cls = new_cls;
+        }
+    }
+*/
     if (PyTuple_Check(cls)) {
         Py_ssize_t i;
         Py_ssize_t n;
@@ -2547,7 +2554,14 @@ PyObject_IsSubclass(PyObject *derived, PyObject *cls)
             return 1;
         return recursive_issubclass(derived, cls);
     }
-
+/*
+    if (!strcmp("_GenericAlias", Py_TYPE(cls)->tp_name)) {
+        PyObject* new_cls = PyObject_GetAttrString(cls, "__args__");
+        if (new_cls != NULL) {
+            cls = new_cls;
+        }
+    }
+*/
     if (PyTuple_Check(cls)) {
         Py_ssize_t i;
         Py_ssize_t n;
