@@ -389,11 +389,6 @@ class TupleTests(BaseTestCase):
             pass
         self.assertTrue(issubclass(MyTuple, Tuple))
 
-    def test_tuple_instance_type_error(self):
-        with self.assertRaises(TypeError):
-            isinstance((0, 0), Tuple[int, int])
-        self.assertIsInstance((0, 0), Tuple)
-
     def test_repr(self):
         self.assertEqual(repr(Tuple), 'typing.Tuple')
         self.assertEqual(repr(Tuple[()]), 'typing.Tuple[()]')
