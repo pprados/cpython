@@ -4,6 +4,7 @@
 
 import unittest
 import sys
+import typing
 
 
 
@@ -213,12 +214,22 @@ class TestIsInstanceIsSubclass(unittest.TestCase):
         self.assertEqual(False, isinstance(None, str | int))
         self.assertEqual(True, isinstance(3, str | int))
         self.assertEqual(True, isinstance("", str | int))
+        self.assertEqual(True, isinstance([], typing.List | typing.Tuple))
+        self.assertEqual(True, isinstance(2, typing.List | int))
+        self.assertEqual(False, isinstance(2, typing.List | typing.Tuple))
+        self.assertEqual(True, isinstance(2, ~int))
+        self.assertEqual(True, isinstance(None, ~int))
+
 
     def test_subclass_normal(self):
         # normal classes
         self.assertEqual(True, issubclass(Super, Super))
         self.assertEqual(False, issubclass(Super, AbstractSuper))
         self.assertEqual(False, issubclass(Super, Child))
+        self.assertEqual(True, issubclass(typing.List, typing.List|typing.Tuple))
+        self.assertEqual(False, issubclass(int, typing.List|typing.Tuple))
+        self.assertEqual(True, issubclass(int, ~int))
+        self.assertEqual(True, issubclass(type(None), ~int))
 
         self.assertEqual(True, issubclass(Child, Child))
         self.assertEqual(True, issubclass(Child, Super))
