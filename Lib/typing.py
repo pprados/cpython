@@ -669,6 +669,11 @@ class _GenericAlias(_Final, _root=True):
         if not name:
             self.__module__ = origin.__module__
 
+    def __or__(self,right):
+        return Union[self,right]
+    def __ror__(self,right):
+        return Union[self,right]
+
     @_tp_cache
     def __getitem__(self, params):
         if self.__origin__ in (Generic, Protocol):
