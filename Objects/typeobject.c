@@ -3641,7 +3641,7 @@ static PyObject *
 type_or(PyTypeObject* self, PyObject* param) {
     // Check param is a PyType or GenericAlias
     if ((param == NULL) ||
-        (strncmp("_GenericAlias", Py_TYPE(param)->tp_name, strlen("_GenericAlias")) != 0 &&
+        (strcmp("_GenericAlias", Py_TYPE(param)->tp_name) != 0 &&
          (param != Py_None) &&
          (PyObject_IsInstance(param, (PyObject *) &PyType_Type) != 1)
         )
