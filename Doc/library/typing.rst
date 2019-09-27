@@ -1220,11 +1220,10 @@ The module defines the following classes, functions and decorators:
 
    * You cannot write ``Union[X][Y]`` or `` X | Y``.
 
-   * You can use ``~X`` (or ```Optional[X]``) as a shorthand for ``Union[X, None]``.
+   * You can use ``Optional[X]`` (or X | None) as a shorthand for ``Union[X, None]``.
 
    .. versionadded:: 3.9
       Add binary_or syntax : ``typeA | typeB`` == ``Union[typeA,typeB]``
-      Add invert syntax : ``~typeA`` == ``Union[typeA,None]``
    .. versionchanged:: 3.7
       Don't remove explicit subclasses from unions at runtime.
 
@@ -1232,7 +1231,7 @@ The module defines the following classes, functions and decorators:
 
    Optional type.
 
-   ``~X`` or ```Optional[X]`` is equivalent to ``Union[X, None]``.
+   ``Optional[X]`` is equivalent to ``X | None`` or ``Union[X, None]``.
 
    Note that this is not the same concept as an optional argument,
    which is one that has a default.  An optional argument with a
@@ -1246,11 +1245,11 @@ The module defines the following classes, functions and decorators:
    use of ``Optional`` is appropriate, whether the argument is optional
    or not. For example::
 
-      def foo(arg: ~int = None) -> None:
+      def foo(arg: Optional[int] = None) -> None:
           ...
    or
 
-      def foo(arg: Optional[int] = None) -> None:
+      def foo(arg: int | None = None) -> None:
           ...
 
 .. data:: Tuple
