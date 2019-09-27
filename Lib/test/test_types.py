@@ -635,6 +635,14 @@ class TypesTests(unittest.TestCase):
         with self.assertRaises(TypeError):
             3 | int
 
+    def test_invert_types_operator(self):
+        self.assertEqual(~int, typing.Union[int, None])
+        self.assertEqual(~str, typing.Union[str, None])
+        self.assertEqual(~typing.List[int], typing.Union[typing.List[int], None])
+        self.assertEqual(~typing.Tuple[int], typing.Union[typing.Tuple[int], None])
+        class A : ...
+        self.assertEqual(~A, typing.Union[A, None])
+
 class MappingProxyTests(unittest.TestCase):
     mappingproxy = types.MappingProxyType
 

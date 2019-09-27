@@ -1245,6 +1245,10 @@ The module defines the following classes, functions and decorators:
    use of ``Optional`` is appropriate, whether the argument is optional
    or not. For example::
 
+      def foo(arg: ~int = None) -> None:
+          ...
+   or
+
       def foo(arg: Optional[int] = None) -> None:
           ...
    or

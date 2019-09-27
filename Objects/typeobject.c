@@ -3634,9 +3634,14 @@ type_or(PyTypeObject* self, PyObject* param) {
     // 4. Return instance
     return newUnion;
 }
+PyObject *
+type_invert(PyTypeObject* self) {
+    return type_or(self,Py_None);
+}
 
 static PyNumberMethods type_as_number = {
         .nb_or = (binaryfunc)type_or, // Add __or__ function
+        .nb_invert = (unaryfunc)type_invert, // Add __invert__ function
 };
 
 PyTypeObject PyType_Type = {
