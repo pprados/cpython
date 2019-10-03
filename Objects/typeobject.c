@@ -3639,24 +3639,30 @@ type_is_gc(PyTypeObject *type)
 
 static PyObject *
 type_or(PyTypeObject* self, PyObject* param) {
+    PyObject* typing=PyImport_ImportModule("typing");
+    PyTypeObject* genericAlias = (PyTypeObject*)PyObject_GetAttrString(typing,"_GenericAlias");
+
     // Check param is a PyType or GenericAlias
     if ((param == NULL) ||
-        (strcmp("_GenericAlias", Py_TYPE(param)->tp_name) != 0 &&
+        (
          (param != Py_None) &&
+         ! PyType_IsSubtype(genericAlias, Py_TYPE(param)) &&
          (PyObject_IsInstance(param, (PyObject *) &PyType_Type) != 1)
         )
             ) {
         PyErr_SetString(PyExc_TypeError, "'type' expected");
+        Py_DECREF(genericAlias);
+        Py_DECREF(typing);
         return NULL;
     }
 
     // 1. Create a tuple with types
     PyObject *tuple=PyTuple_Pack(2,self, param);
     // 2. Create Union with tuple
-    PyObject* typing=PyImport_ImportModule("typing");
     PyObject* unionType = PyObject_GetAttrString(typing,"Union");
     PyObject *newUnion=PyObject_GetItem(unionType, tuple);
     // 3. Clean memory
+    Py_DECREF(genericAlias);
     Py_DECREF(typing);
     Py_DECREF(unionType);
     Py_DECREF(tuple);
