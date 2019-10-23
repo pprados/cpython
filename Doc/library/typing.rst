@@ -295,7 +295,8 @@ User defined generic type aliases are also supported. Examples::
 
    from typing import TypeVar, Iterable, Tuple, Union
    S = TypeVar('S')
-   Response = Union[Iterable[S], int]
+   Response = Iterable[S] | int
+   # or Response = Union[Iterable[S], int]
 
    # Return type here is same as Union[Iterable[str], int]
    def response(query: str) -> Response[str]:
@@ -1192,12 +1193,13 @@ The module defines the following classes, functions and decorators:
 
    Union type; ``Union[X, Y]`` means either X or Y.
 
-   To define a union, use e.g. ``Union[int, str]``.  Details:
+   To define a union, use e.g. ``Union[int, str]`` or ``int | str``.  Details:
 
    * The arguments must be types and there must be at least one.
 
    * Unions of unions are flattened, e.g.::
 
+       int | str | float == Union[int, str, float]
        Union[Union[int, str], float] == Union[int, str, float]
 
    * Unions of a single argument vanish, e.g.::
@@ -1206,17 +1208,22 @@ The module defines the following classes, functions and decorators:
 
    * Redundant arguments are skipped, e.g.::
 
+       int | str | int == Union[int, str]
        Union[int, str, int] == Union[int, str]
 
    * When comparing unions, the argument order is ignored, e.g.::
 
+       int | str == str | int
        Union[int, str] == Union[str, int]
 
    * You cannot subclass or instantiate a union.
 
-   * You cannot write ``Union[X][Y]``.
+   * You cannot write ``Union[X][Y]`` or `` X | Y``.
 
-   * You can use ``Optional[X]`` as a shorthand for ``Union[X, None]``.
+   * You can use ``Optional[X]`` (or X | None) as a shorthand for ``Union[X, None]``.
+
+   .. versionadded:: 3.9
+      Add binary_or syntax : ``typeA | typeB`` == ``Union[typeA,typeB]``
 
    .. versionchanged:: 3.7
       Don't remove explicit subclasses from unions at runtime.
@@ -1225,7 +1232,7 @@ The module defines the following classes, functions and decorators:
 
    Optional type.
 
-   ``Optional[X]`` is equivalent to ``Union[X, None]``.
+   ``Optional[X]`` is equivalent to ``X | None`` or ``Union[X, None]``.
 
    Note that this is not the same concept as an optional argument,
    which is one that has a default.  An optional argument with a
@@ -1240,6 +1247,14 @@ The module defines the following classes, functions and decorators:
    or not. For example::
 
       def foo(arg: Optional[int] = None) -> None:
+          ...
+   or
+
+      def foo(arg: int | None = None) -> None:
+          ...
+   or
+
+      def foo(arg: int | None = None) -> None:
           ...
 
 .. data:: Tuple

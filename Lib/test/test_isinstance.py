@@ -4,6 +4,7 @@
 
 import unittest
 import sys
+import typing
 
 
 
@@ -208,11 +209,22 @@ class TestIsInstanceIsSubclass(unittest.TestCase):
         self.assertEqual(False, isinstance(AbstractChild(), Super))
         self.assertEqual(False, isinstance(AbstractChild(), Child))
 
+    def test_isinstance_with_or_union(self):
+        self.assertEqual(True, isinstance(AbstractChild(), AbstractChild | int))
+        self.assertEqual(False, isinstance(None, str | int))
+        self.assertEqual(True, isinstance(3, str | int))
+        self.assertEqual(True, isinstance("", str | int))
+        self.assertEqual(True, isinstance([], typing.List | typing.Tuple))
+        self.assertEqual(True, isinstance(2, typing.List | int))
+        self.assertEqual(False, isinstance(2, typing.List | typing.Tuple))
+
     def test_subclass_normal(self):
         # normal classes
         self.assertEqual(True, issubclass(Super, Super))
         self.assertEqual(False, issubclass(Super, AbstractSuper))
         self.assertEqual(False, issubclass(Super, Child))
+        self.assertEqual(True, issubclass(typing.List, typing.List|typing.Tuple))
+        self.assertEqual(False, issubclass(int, typing.List|typing.Tuple))
 
         self.assertEqual(True, issubclass(Child, Child))
         self.assertEqual(True, issubclass(Child, Super))
@@ -250,6 +262,10 @@ class TestIsInstanceIsSubclass(unittest.TestCase):
         # make sure that issubclass raises RecursionError before the C stack is
         # blown
         self.assertRaises(RecursionError, blowstack, isinstance, '', str)
+
+    def test_subclass_with_union(self):
+        self.assertEqual(True, issubclass(int, int | float | int))
+        self.assertEqual(True, issubclass(str, str | Child | str))
 
 def blowstack(fxn, arg, compare_to):
     # Make sure that calling isinstance with a deeply nested tuple for its

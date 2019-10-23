@@ -2463,6 +2463,7 @@ Return whether an object is an instance of a class or of a subclass thereof.
 A tuple, as in ``isinstance(x, (A, B, ...))``, may be given as the target to
 check against. This is equivalent to ``isinstance(x, A) or isinstance(x, B)
 or ...`` etc.
+ Accept ``isinstance(x, A|B)``
 [clinic start generated code]*/
 
 static PyObject *
@@ -2491,6 +2492,7 @@ Return whether 'cls' is a derived from another class or is the same class.
 A tuple, as in ``issubclass(x, (A, B, ...))``, may be given as the target to
 check against. This is equivalent to ``issubclass(x, A) or issubclass(x, B)
 or ...`` etc.
+Accept ``issubclass(x, A|B|C)``
 [clinic start generated code]*/
 
 static PyObject *
