@@ -1251,6 +1251,10 @@ The module defines the following classes, functions and decorators:
 
       def foo(arg: int | None = None) -> None:
           ...
+   or
+
+      def foo(arg: int | None = None) -> None:
+          ...
 
 .. data:: Tuple
 
